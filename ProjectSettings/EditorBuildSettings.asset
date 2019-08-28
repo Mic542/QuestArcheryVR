@@ -5,30 +5,6 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
-    path: Assets/CampScene.unity
-    guid: 62f91f4e604104d138629c18a4e823d6
-  - enabled: 0
-    path: Assets/Oculus/SampleFramework/Usage/AvatarGrab.unity
-    guid: 941c413af7c367d40aab0725f5a59530
-  - enabled: 0
-    path: Assets/Oculus/SampleFramework/Usage/DistanceGrab.unity
-    guid: 24f58b3f0ca02d44eaec7f50bca538f2
-  - enabled: 0
-    path: Assets/Scenes/SampleSceneGrab.unity
-    guid: 3b2eb2d2bc0f74d04a16eaab9826227f
-  - enabled: 0
-    path: Assets/bowAndArrow.unity
-    guid: 894b4a15b5fe74974bbe7df5b7653ab7
-  - enabled: 0
-    path: Assets/Runemark Studio/Freebies/Polygon Desert Pack/DesertScene.unity
-    guid: 53f5a0914b195b74abc2fb43a9e2ce22
-  - enabled: 0
-    path: Assets/UF Creator LITE/Demo_Scenes/Bandit_Camp_1A.unity
-    guid: 818a1fd86a1a55349b2e7ccf229899ec
-  - enabled: 0
-    path: Assets/SkythianCat/Glowing_Forest/DEMO/Demo_scene02.unity
-    guid: 2912b4d107388144d8e57396301eafe4
   - enabled: 1
     path: Assets/Scenes/Low_Poly_Survival/Scenes/Showcase.unity
     guid: 3e0abf75efe2ff54690cfab2e7de11bb

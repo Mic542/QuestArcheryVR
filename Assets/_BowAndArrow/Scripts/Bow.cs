@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 using TMPro;
+using System.Collections.Generic;
 
 public class Bow : MonoBehaviour
 {
@@ -31,12 +32,28 @@ public class Bow : MonoBehaviour
     private Animator m_Animator = null;
 
     private float m_PullValue = 0.0f;
-    private bool isAttached = false;
+    public bool isAttached = false;
     public bool InGame { get; set; } = false;
 
-    public int m_MaxAmmo = 15;
+    [Header("Arrow Box")]
+    public Transform ArrowBoxLoc1;
+    public Transform ArrowBoxLoc2;
+    public Transform ArrowBoxLoc3;
+    public GameObject moveHereText;
+    public GameObject ArrowBox;
+
+    public GameObject ArrowWoGrab;
+
+    [Header("Barrel Highlight")]
+    public List<GameObject> BarrelOutline;
+
+    [Header("Particle Highlight")]
+    public ParticleSystem particle;
+
+    public int m_MaxAmmo = 10;
 
     private int m_Score { get; set; } = 0;
+    private bool first = true; //if this is the first run aka just launched
 
     private void Awake()
     {
@@ -53,19 +70,41 @@ public class Bow : MonoBehaviour
         m_ImageTitle.GetComponent<TitleScript>().Out();
         m_StartingObj.SetActive(false);
         m_Score = 0;
-        m_MaxAmmo = 15;
+        m_MaxAmmo = 10;
+
+        moveHereText.SetActive(true);
+
+        CreateArrowBox();
 
         m_ScoreUI.text = "Score " + m_Score;
+
+        setOutline(true);
+        particle.Play();
+
+        if (m_CurrArrow != null)
+        {
+            isAttached = false;
+            Destroy(m_CurrArrow.gameObject);
+            m_CurrArrow = null;
+        }
     }
 
     private void Start()
     {
-        //StartCoroutine(CreateArrow(0.0f));
-
         CreateArrow();
-        m_UIAmmoTxt.text = "x" + m_MaxAmmo;
+        m_UIAmmoTxt.text = "Arrow x" + m_MaxAmmo;
         m_StartingObj.SetActive(true);
         m_ImageTitle.GetComponent<TitleScript>().In();
+
+        setOutline(false);
+    }
+
+    public void setOutline(bool value)
+    {
+        foreach (GameObject outline in BarrelOutline)
+        {
+            outline.GetComponent<Outline>().enabled = value;
+        }
     }
 
     private void OnDestroy()
@@ -75,26 +114,48 @@ public class Bow : MonoBehaviour
 
     public void CreateArrow()
     {
-        if (m_MaxAmmo <= 0) return;
-        GameObject arrowObj = Instantiate(m_ArrowPrefab, m_ArrowInstantiateLoc);
+        GameObject arrowObj = Instantiate(ArrowWoGrab, m_Socket.transform);
 
         arrowObj.transform.localPosition = new Vector3(0, 0, 0.425f);
         arrowObj.transform.localEulerAngles = Vector3.zero;
 
-        m_CurrArrow = arrowObj.GetComponent<Arrow>();
+        AttachBowToArrow(arrowObj);
     }
 
-    public void AttachBowToArrow()
+    public void AttachBowToArrow(GameObject arrow)
     {
-        if (isAttached) return;
+        if (isAttached || m_MaxAmmo <= 0) return;
+
+        GameObject arrowObj = arrow;
+        m_CurrArrow = arrowObj.GetComponent<Arrow>();
+
         m_CurrArrow.transform.parent = m_Socket.transform;
         m_CurrArrow.transform.localPosition = new Vector3(0, 0, 0.425f);
         m_CurrArrow.transform.localEulerAngles = Vector3.zero;
 
         if (InGame) m_MaxAmmo--;
-
-        m_UIAmmoTxt.text = "x" + m_MaxAmmo;
+        m_UIAmmoTxt.text = "Arrow x" + m_MaxAmmo;
         isAttached = true;
+        moveHereText.SetActive(false);
+        particle.Stop();
+    }
+
+    public void CreateArrowBox()
+    {
+        for (int i = 0; i < 10; i++)
+        {
+            Instantiate(m_ArrowPrefab, ArrowBoxLoc1);
+            Instantiate(m_ArrowPrefab, ArrowBoxLoc2);
+            Instantiate(m_ArrowPrefab, ArrowBoxLoc3);
+        }
+    }
+
+    public void DestroyPreviousArrowBox()
+    {
+        foreach (GameObject fooObj in GameObject.FindGameObjectsWithTag("Arrow"))
+        {
+            Destroy(fooObj);
+        }
     }
 
     public void AddScore(int score)
@@ -166,15 +227,29 @@ public class Bow : MonoBehaviour
         m_CurrArrow = null;
 
         isAttached = false;
-        CreateArrow();
+
+        if (!InGame)
+        {
+            CreateArrow();
+        }
 
         if (m_MaxAmmo.Equals(0))
         {
-            m_MaxAmmo = 15;
-            CreateArrow();
+            StartCoroutine(WaitForLastArrow());
+        }
+    }
+
+    IEnumerator WaitForLastArrow()
+    {
+        yield return new WaitForSeconds(2.0f);
+        if (m_MaxAmmo.Equals(0))
+        {
+            m_UIAmmoTxt.text = "Game Over";
+            m_MaxAmmo = 10;
             m_StartingObj.SetActive(true);
             m_Title.gameObject.SetActive(true);
             InGame = false;
+            CreateArrow();
         }
     }
 }

@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using TMPro;
+using System.Collections.Generic;
+using System.Collections;
 
 public class Arrow : MonoBehaviour
 {
@@ -25,9 +27,15 @@ public class Arrow : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (!other.CompareTag("Bow")) return;
-        Bow.Instance.AttachBowToArrow();
-        Destroy(m_Grabbable);
+        if (!other.CompareTag("Bow") || Bow.Instance.isAttached || !Bow.Instance.InGame)
+        {
+            return;
+        }
+        else
+        {
+            Bow.Instance.AttachBowToArrow(gameObject);
+            Destroy(m_Grabbable);
+        }
     }
 
     private void FixedUpdate()
@@ -46,7 +54,8 @@ public class Arrow : MonoBehaviour
             {
                 getScore = m_Target.point;
                 m_Particle.Play();
-                Bow.Instance.PopUpTextPoint(getScore);
+
+               // Bow.Instance.PopUpTextPoint(getScore);
             }
 
             if (hits.collider.gameObject.tag.Equals("Apple"))
@@ -80,7 +89,7 @@ public class Arrow : MonoBehaviour
         m_Rigidbody.useGravity = true;
         m_Rigidbody.AddForce(transform.forward * (pullValue * m_Speed));
 
-        if (!Bow.Instance.InGame) Destroy(gameObject, 5.0f);
+        if (!Bow.Instance.InGame) Destroy(gameObject, 3.0f);
 
         Destroy(gameObject, 15f);
     }

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="no"?>
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     android:installLocation="auto">
     <!-- Request the headset DoF mode -->
@@ -17,4 +17,5 @@
         </activity>
         <meta-data android:name="unityplayer.SkipPermissionsDialog" android:value="false" />
     </application>
+    <uses-feature android:name="android.hardware.vr.headtracking" android:required="true" android:version="1" />
 </manifest>

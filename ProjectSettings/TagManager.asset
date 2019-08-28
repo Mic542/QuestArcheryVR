@@ -7,6 +7,9 @@ TagManager:
   - Bow
   - Target
   - Apple
+  - FxTemporaire
+  - ArrowBox
+  - Arrow
   layers:
   - Default
   - TransparentFX
@@ -17,7 +20,7 @@ TagManager:
   - 
   - 
   - Bow
-  - 
+  - Arrow
   - 
   - 
   - 
@@ -41,6 +44,9 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: UI
+    uniqueID: 150765217
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0
