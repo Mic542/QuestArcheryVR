@@ -6,8 +6,5 @@
  - Low poly Particle
  - Modular Survival Kit VR and Mobile
  - and many others
- 
- Also a tutorial from VR with Andrew:
- https://www.youtube.com/watch?v=5j0SlYHiJmw
- 
+
  Thanks to all the assets creator and tutorial!
